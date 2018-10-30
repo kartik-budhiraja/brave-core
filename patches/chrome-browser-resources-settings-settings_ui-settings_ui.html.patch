@@ -1,7 +1,16 @@
 diff --git a/chrome/browser/resources/settings/settings_ui/settings_ui.html b/chrome/browser/resources/settings/settings_ui/settings_ui.html
-index 88d91ba73e146bdefdb2c51b84f49ea4be934aad..2cac764ba9a2687c365ecaa52fe3deb16f5ff397 100644
+index 88d91ba73e146bdefdb2c51b84f49ea4be934aad..93ff6cd345597977efee51179ecbd91461e33488 100644
 --- a/chrome/browser/resources/settings/settings_ui/settings_ui.html
 +++ b/chrome/browser/resources/settings/settings_ui/settings_ui.html
+@@ -38,7 +38,7 @@
+       cr-toolbar {
+         @apply --layout-center;
+         --iron-icon-fill-color: white;
+-        background-color: var(--google-blue-700);
++        background-image: linear-gradient(-90deg, #F73A1C, #BF14A2);
+         color: white;
+         min-height: 56px;
+         z-index: 2;
 @@ -48,6 +48,10 @@
          flex: 1;
          overflow: overlay;
