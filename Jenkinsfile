@@ -23,8 +23,8 @@ pipeline {
                         git clone -b ${CHANGE_TARGET} https://github.com/brave/brave-browser.git
                     fi
                     git -C brave-browser checkout -f -b brave-core-${GIT_BRANCH} || git -C brave-browser checkout -f brave-core-${GIT_BRANCH}
-                    git -C brave-browser fetch origin brave-core-${GIT_BRANCH} || exit 0
-                    git -C brave-browser reset --hard origin/brave-core-${GIT_BRANCH} || exit 0
+                    git -C brave-browser fetch origin brave-core-${GIT_BRANCH}
+                    git -C brave-browser reset --hard origin/brave-core-${GIT_BRANCH}
                 """
             }
         }
@@ -33,6 +33,7 @@ pipeline {
                 sh """
                     git config -f brave-browser/.git/config user.name brave-builds
                     git config -f brave-browser/.git/config user.email devops@brave.com
+                    git config -f brave-core/.git/config push.default simple
                 """
             }
         }
@@ -47,7 +48,7 @@ pipeline {
         stage('push') {
             steps {
                 withCredentials([usernameColonPassword(credentialsId: 'brave-builds-github-token-for-pr-builder', variable: 'GITHUB_CREDENTIALS')]) {
-                    sh "git -C brave-browser commit -a -m 'pin brave-core to ${GIT_COMMIT} from ${GIT_BRANCH}' || exit 0"
+                    sh "git -C brave-browser commit -a -m 'pin brave-core to ${GIT_COMMIT} from ${GIT_BRANCH}'"
                     sh "git -C brave-browser push https://${GITHUB_CREDENTIALS}@github.com/brave/brave-browser"
                 }
             }
