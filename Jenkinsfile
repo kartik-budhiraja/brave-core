@@ -33,7 +33,7 @@ pipeline {
                 sh """
                     git config -f brave-browser/.git/config user.name brave-builds
                     git config -f brave-browser/.git/config user.email devops@brave.com
-                    git config -f brave-core/.git/config push.default simple
+                    git config -f brave-browser/.git/config push.default simple
                 """
             }
         }
