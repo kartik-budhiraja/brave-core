@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f11080326b2ae 100644
+index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..d116ae93881505cfc720fdeb6b334efb91fb17ec 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -10,44 +10,69 @@
@@ -141,7 +141,7 @@ index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f1108
          $i18n{peoplePageTitle}
        </a>
        <a id="autofill" href="/autofill"
-@@ -114,19 +148,24 @@
+@@ -114,10 +148,11 @@
          <iron-icon icon="settings:assignment"></iron-icon>
          $i18n{autofillPageTitle}
        </a>
@@ -149,16 +149,15 @@ index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f1108
 -        hidden="[[!pageVisibility.appearance]]">
 -        <iron-icon icon="settings:palette"></iron-icon>
 -        $i18n{appearancePageTitle}
--      </a>
 +      <a id="extensionsLink" href="chrome://extensions" target="_blank"
 +          on-click="onExtensionsLinkClick_"
 +          title="$i18n{extensionsLinkTooltip}">
 +        <iron-icon icon="brave_settings:misc-extensions"></iron-icon>
 +        $i18n{extensionsPageTitle}
-+       </a>
+       </a>
  <if expr="chromeos">
        <a href="/device">
-         <iron-icon icon="settings:laptop-chromebook"></iron-icon>
+@@ -125,8 +160,12 @@
          $i18n{devicePageTitle}
        </a>
  </if>
@@ -172,16 +171,7 @@ index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f1108
          $i18n{searchPageTitle}
        </a>
  <if expr="chromeos">
-@@ -148,11 +187,20 @@
-         $i18n{defaultBrowser}
-       </a>
- </if>
-+      <a href="/braveSync" hidden="[[!pageVisibility.braveSync]]">
-+        <iron-icon icon="cr:sync"></iron-icon>
-+        $i18n{braveSync}
-+      </a>
-       <a id="onStartup" href="/onStartup"
-         hidden="[[!pageVisibility.onStartup]]">
+@@ -153,6 +192,11 @@
          <iron-icon icon="settings:power-settings-new"></iron-icon>
          $i18n{onStartup}
        </a>
@@ -193,7 +183,7 @@ index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f1108
        <paper-button toggles id="advancedButton"
            aria-active-attribute="aria-expanded" active="{{advancedOpened}}"
            hidden="[[!pageVisibility.advancedSettings]]">
-@@ -174,21 +222,23 @@
+@@ -174,15 +218,15 @@
              $i18n{privacyPageTitle}
            </a>
            <a href="/languages">
@@ -211,16 +201,8 @@ index 2fcea63a9bf9bf0400640d3ec8b6277087814bab..030b7aaccd676a71e4590d45296f1108
 +            <iron-icon icon="brave_settings:printer"></iron-icon>
              $i18n{printingPageTitle}
            </a>
-+<if expr="_google_chrome">
            <a href="/accessibility">
-             <iron-icon icon="settings:accessibility"></iron-icon>
-             $i18n{a11yPageTitle}
-           </a>
-+</if>
- <if expr="not chromeos">
-           <a href="/system">
-             <iron-icon icon="settings:build"></iron-icon>
-@@ -196,19 +246,19 @@
+@@ -196,19 +240,19 @@
            </a>
  </if>
            <a id="reset" href="/reset" hidden="[[!pageVisibility.reset]]">
