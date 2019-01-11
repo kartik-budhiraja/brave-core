@@ -143,6 +143,5 @@ declare namespace Rewards {
   export interface AdsData {
     adsEnabled: boolean
     adsPerHour: number
-    adsUIEnabled: boolean
   }
 }
