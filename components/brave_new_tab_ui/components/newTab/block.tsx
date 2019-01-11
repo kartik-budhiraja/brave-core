@@ -16,8 +16,11 @@ import {
   DropTargetSpec
 } from 'react-dnd'
 
-// Utils
-import { cx } from '../../../common/classSet'
+// Feature-specific components
+import { Tile, TileActionsContainer, TileAction, TileFavicon } from 'brave-ui/features/newTab/default'
+
+// Icons
+import { PinIcon, BookmarkOIcon, BookmarkIcon, CloseStrokeIcon } from 'brave-ui/components/icons'
 
 const Types = {
   BLOCK: 'block'
@@ -120,54 +123,42 @@ class Block extends React.Component<Props, {}> {
       style,
       favicon
     } = this.props
-    const starIcon = isBookmarked ? 'bookmark' : 'bookmark-o'
-    const pinIcon = isPinned ? 'pin' : 'pin-o'
+    const starIcon = isBookmarked ? <BookmarkOIcon /> : <BookmarkIcon />
+    const pinIcon = <PinIcon />
 
     return connectDragSource(
       connectDropTarget(
-        <div className='topSiteSquareSpace'>
-          <div className='topSitesElement'>
-            <div className='topSitesActionContainer'>
-              <button
-                className={cx({
-                  topSitesActionBtn: true,
-                  [pinIcon]: true
-                })}
+        <div>
+          <Tile title={title} style={style}>
+            <TileActionsContainer>
+              <TileAction
                 onClick={onPinnedTopSite}
-                data-l10n-id={
-                  isPinned ? 'pinTopSiteButton' : 'unpinTopSiteButton'
-                }
-              />
-              <button
-                className={cx({
-                  topSitesActionBtn: true,
-                  [starIcon]: true
-                })}
+                data-l10n-id={isPinned ? 'pinTopSiteButton' : 'unpinTopSiteButton'}
+              >
+                {pinIcon}
+              </TileAction>
+              <TileAction
                 onClick={onToggleBookmark}
-                data-l10n-id={
-                  isBookmarked ? 'removeBookmarkButton' : 'addBookmarkButton'
-                }
-              />
-              <button
-                className='topSitesActionBtn close'
+                data-l10n-id={isBookmarked ? 'removeBookmarkButton' : 'addBookmarkButton'}
+              >
+                {starIcon}
+              </TileAction>
+              <TileAction
                 onClick={onIgnoredTopSite}
                 data-l10n-id='removeTopSiteButton'
-              />
-            </div>
-            <a
-              className='topSitesElementFavicon'
-              title={title}
-              href={href}
-              style={style}
-            >
-              {isPinned ? (
-                <div className='pinnedTopSite'>
-                  <span className='icon-container pin' />
-                </div>
-              ) : null}
-              <img src={favicon} />
+              >
+                <CloseStrokeIcon />
+              </TileAction>
+            </TileActionsContainer>
+            {
+              isPinned
+              ? <TileAction onClick={onPinnedTopSite} standalone={true}><PinIcon /></TileAction>
+              : null
+            }
+            <a href={href}>
+              <TileFavicon src={favicon} />
             </a>
-          </div>
+          </Tile>
         </div>
       )
     )

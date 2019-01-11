@@ -6,15 +6,21 @@ import * as React from 'react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { Clock } from 'brave-ui/old'
+import {
+  Page,
+  Header,
+  Main,
+  List,
+  Footer,
+  DynamicBackground,
+  Gradient
+} from 'brave-ui/features/newTab/default'
 
 // Components
 import Stats from './stats'
 import Block from './block'
 import FooterInfo from './footerInfo'
-import SiteRemovalNotification from './siteRemovalNotification'
-
-// Constants
-import { theme } from '../../constants/theme'
+import SiteRemovalNotification from './notification'
 
 interface Props {
   actions: any
@@ -26,8 +32,8 @@ class NewTabPage extends React.Component<Props, {}> {
     return this.props.actions
   }
 
-  get showImages () {
-    return this.props.newTabData.showImages && !!this.props.newTabData.backgroundImage
+  componentDidMount () {
+    this.actions.onHideSiteRemovalNotification()
   }
 
   onDraggedSite = (fromUrl: string, toUrl: string, dragRight: boolean) => {
@@ -66,19 +72,8 @@ class NewTabPage extends React.Component<Props, {}> {
     this.actions.undoSiteIgnored()
   }
 
-  /**
-   * Clear ignoredTopSites and pinnedTopSites list
-   */
   onUndoAllSiteIgnored = () => {
     this.actions.undoAllSiteIgnored()
-  }
-
-  /**
-   * This handler only fires when the image fails to load.
-   * If both the remote and local image fail, page defaults to gradients.
-   */
-  onBackgroundImageLoadFailed = () => {
-    this.actions.backgroundImageLoadFailed()
   }
 
   render () {
@@ -89,33 +84,15 @@ class NewTabPage extends React.Component<Props, {}> {
       return null
     }
 
-    const backgroundProps: Partial<NewTab.Image> = {}
-    const bgImage: NewTab.Image | undefined = this.props.newTabData.backgroundImage
-    let gradientClassName = 'gradient'
-    if (this.showImages && bgImage) {
-      backgroundProps.style = bgImage.style
-      gradientClassName = 'bgGradient'
-    }
     return (
-      <div data-test-id='dynamicBackground' className='dynamicBackground' {...backgroundProps}>
-        {
-          this.showImages && bgImage
-            ? <img src={bgImage.source} onError={this.onBackgroundImageLoadFailed} data-test-id='backgroundImage' />
-            : null
-        }
-        <div data-test-id={this.showImages ? 'bgGradient' : 'gradient'} className={gradientClassName} />
-        <div className='content'>
-          <main style={theme.newTab}>
-            <div className='newTabStats'>
-              <div className='statsContainer'>
-                <Stats stats={newTabData.stats}/>
-              </div>
-              <div className='clockContainer'>
-                <Clock />
-              </div>
-            </div>
-            <div className='topSitesContainer'>
-              <nav className='topSitesGrid'>
+      <DynamicBackground background={newTabData.backgroundImage!.source}>
+        <Gradient />
+        <Page>
+          <Header>
+            <Stats stats={newTabData.stats} />
+            <Clock />
+            <Main>
+              <List>
                 {
                   this.props.newTabData.gridSites.map((site: NewTab.Site) =>
                     <Block
@@ -135,21 +112,24 @@ class NewTabPage extends React.Component<Props, {}> {
                     />
                   )
                 }
-              </nav>
-            </div>
-          </main>
-          {
-            this.props.newTabData.showSiteRemovalNotification
-              ? <SiteRemovalNotification
-                onUndoIgnoredTopSite={this.onUndoIgnoredTopSite}
-                onRestoreAll={this.onUndoAllSiteIgnored}
-                onCloseNotification={this.onHideSiteRemovalNotification}
-              />
-              : null
-          }
-          <FooterInfo backgroundImage={bgImage} />
-        </div>
-      </div>
+              </List>
+              {
+                this.props.newTabData.showSiteRemovalNotification
+                ? (
+                  <SiteRemovalNotification
+                    onUndoIgnoredTopSite={this.onUndoIgnoredTopSite}
+                    onRestoreAll={this.onUndoAllSiteIgnored}
+                    onCloseNotification={this.onHideSiteRemovalNotification}
+                  />
+                ) : null
+              }
+            </Main>
+          </Header>
+          <Footer>
+            <FooterInfo backgroundImageInfo={newTabData.backgroundImage} />
+          </Footer>
+        </Page>
+      </DynamicBackground>
     )
   }
 }
